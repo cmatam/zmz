@@ -4,19 +4,9 @@ OPC=`zenity --list --radiolist --column=OPCION --column=ACCION --hide-header $( 
 
 case $OPC in
 Lista)
-
-	LIS=`gammu getallmemory ME 2>/dev/null | grep -e 'general' -e 'Nombre' | cut -d ':' -f 2`
-	A1=`zenity --list --column=COLUMNA $LIS`
-	A2=`zenity --text-info --editable`
-
-	zenity --question --default-cancel --text=`echo -e "$A2\n$A1"`
-
-	if [ $? -eq 0 ] ;  then
-		S=`echo $A2 | gammu sendsms TEXT $A1`
-		zenity  --info --text=$S
-	else
-		echo "no"
-	fi
+	A1=`gammu getallmemory SM 2>/dev/null | grep -e 'general' -e 'Nombre'`
+	A2=`gammu getallmemory ME 2>/dev/null | grep -e 'general' -e 'Nombre'`
+	zenity --info --ellipsize --text="$A1\n$A2"
 ;;
 
 Simple)
@@ -28,7 +18,27 @@ Simple)
 
 	if [ $? -eq 0 ] ;  then
 		S=`echo $A2 | gammu sendsms TEXT $A1`
-		zenity  --info --text=$S
+		zenity --info --text="$S"
+	else
+		echo "no"
+	fi
+;;
+
+Leer)
+	A=`gammu getallsms`
+	zenity --info --ellipsize --text=`echo "$A"`
+	echo "$A"
+;;
+
+Borrar)
+	zenity --question --default-cancel --text="¿Seguro?"
+
+	if [ $? -eq 0 ] ;  then
+		gammu getsmsfolders
+		gammu deleteallsms 1
+		gammu deleteallsms 2
+		gammu deleteallsms 3
+		gammu deleteallsms 4
 	else
 		echo "no"
 	fi
