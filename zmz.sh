@@ -1,6 +1,6 @@
 #!/bin/bash
 
-OPC=`zenity --list --radiolist --column=OPCION --column=ACCION --hide-header $( echo -e "1 Lista\n2 Simple\n3 Leer\n4 Borrar" )`
+OPC=`zenity --list --radiolist --column=OPCION --column=ACCION --hide-header $( echo -e "1 Lista\n2 SMS\n3 Leer\n4 Borrar" )`
 
 case $OPC in
 Lista)
@@ -9,7 +9,7 @@ Lista)
 	zenity --info --ellipsize --text="$A1\n$A2"
 ;;
 
-Simple)
+SMS)
 	A=`zenity --forms --add-entry=Numero --add-entry=Texto --text=SMS`
 	A1=`echo $A | cut -d '|' -f 1`
 	A2=`echo $A | cut -d '|' -f 2`
@@ -31,7 +31,7 @@ Leer)
 ;;
 
 Borrar)
-	zenity --question --default-cancel --text="¿Seguro?"
+	zenity --question --default-cancel --text="¿Eliminar Todo?"
 
 	if [ $? -eq 0 ] ;  then
 		gammu getsmsfolders
